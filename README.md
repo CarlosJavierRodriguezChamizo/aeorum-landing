@@ -31,13 +31,20 @@ npx serve .
 
 Luego abre http://localhost:8000
 
-## Despliegue — GitHub Pages
+## Despliegue — GitHub Pages (automático)
 
-El sitio se publica desde la raíz de la rama `main`:
+El despliegue está automatizado con GitHub Actions (`.github/workflows/deploy.yml`):
+cada `push` a `main` publica el sitio.
+
+**Configuración inicial (una sola vez):**
 
 1. Sube el repositorio a GitHub.
-2. En **Settings → Pages**, selecciona **Source: Deploy from a branch**, rama `main`, carpeta `/ (root)`.
-3. La URL será `https://<usuario>.github.io/<repo>/`.
+2. En **Settings → Pages → Build and deployment**, selecciona **Source: GitHub Actions**.
+3. Listo. A partir de ahí, cada push a `main` ejecuta el workflow y publica en
+   `https://<usuario>.github.io/<repo>/`.
+
+Puedes ver el estado en la pestaña **Actions** y lanzarlo a mano con **Run workflow**
+(evento `workflow_dispatch`).
 
 El archivo `.nojekyll` evita el procesado por Jekyll.
 
