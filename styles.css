@@ -1,0 +1,433 @@
+/* ============================================================
+   AURO — Sistema visual base
+   Aceite de oliva virgen extra · Sierra Mágina · Jaén
+   Estética: mediterránea, artesanal, premium, editorial.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. TOKENS · color, tipografía, espaciado
+   ------------------------------------------------------------ */
+:root{
+  /* Paleta */
+  --negro-oliva:   #171713;  /* logo, titulares, textos fuertes, botón principal */
+  --verde-oliva:   #6F6B2E;  /* fondos secundarios, iconos, separadores */
+  --dorado:        #B9983A;  /* acentos premium, hover, líneas finas */
+  --crema:         #F4EFE5;  /* fondo principal */
+  --terracota:     #B64222;  /* llamadas puntuales, badges */
+  --blanco-calido: #FFFAF2;  /* tarjetas, zonas limpias */
+  --gris-texto:    #5F5A4D;  /* texto secundario, microcopy */
+
+  /* Tipografía */
+  --font-heading: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-editorial: 'Cormorant Garamond', Georgia, serif;
+
+  /* Medidas */
+  --maxw: 1240px;
+  --pad-x: clamp(20px, 5vw, 72px);
+  --radius: 4px;          /* esquinas rectas/sutiles */
+  --radius-pill: 999px;   /* botones */
+  --line: 1px solid color-mix(in srgb, var(--negro-oliva) 14%, transparent);
+  --line-gold: 1px solid var(--dorado);
+
+  /* Sombras muy sutiles */
+  --shadow-soft: 0 18px 40px -24px rgba(23,23,19,.45);
+  --shadow-card: 0 10px 30px -22px rgba(23,23,19,.5);
+}
+
+/* ------------------------------------------------------------
+   2. RESET
+   ------------------------------------------------------------ */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body{
+  font-family:var(--font-body);
+  font-weight:400;
+  line-height:1.62;
+  color:var(--negro-oliva);
+  background-color:var(--crema);
+  /* textura sutil tipo papel */
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; border:0; background:none; }
+ul{ list-style:none; }
+
+/* ------------------------------------------------------------
+   3. TIPOGRAFÍA
+   ------------------------------------------------------------ */
+h1,h2,h3,h4{
+  font-family:var(--font-heading);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:-0.02em;
+  line-height:1.02;
+  color:var(--negro-oliva);
+}
+.h-display{ font-size:clamp(2.6rem, 6.5vw, 5rem); }
+.h-xl{ font-size:clamp(2rem, 4.5vw, 3.4rem); }
+.h-lg{ font-size:clamp(1.5rem, 3vw, 2.2rem); }
+.h-sm{ font-size:clamp(1.05rem, 1.6vw, 1.3rem); letter-spacing:0; }
+
+p{ color:var(--negro-oliva); }
+.muted{ color:var(--gris-texto); }
+
+/* Editorial (Cormorant) — frases emocionales, citas, origen */
+.editorial{
+  font-family:var(--font-editorial);
+  font-weight:500;
+  line-height:1.3;
+  letter-spacing:.005em;
+}
+.editorial-i{ font-style:italic; }
+
+/* Etiqueta / kicker */
+.kicker{
+  font-family:var(--font-heading);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:.78rem;
+  color:var(--verde-oliva);
+}
+.kicker--gold{ color:var(--dorado); }
+.kicker--terra{ color:var(--terracota); }
+
+/* ------------------------------------------------------------
+   4. LAYOUT
+   ------------------------------------------------------------ */
+.container{
+  width:100%;
+  max-width:var(--maxw);
+  margin-inline:auto;
+  padding-inline:var(--pad-x);
+}
+.section{ padding-block:clamp(64px, 9vw, 130px); position:relative; }
+.section--tight{ padding-block:clamp(48px, 6vw, 88px); }
+
+/* Separador fino */
+.divider{ height:0; border-top:var(--line); }
+.divider--gold{ border-top:var(--line-gold); opacity:.7; }
+
+/* ------------------------------------------------------------
+   5. BOTONES
+   ------------------------------------------------------------ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.6em;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:.82rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  padding:.95em 1.9em;
+  border-radius:var(--radius-pill);
+  transition:background-color .25s ease, color .25s ease, border-color .25s ease, transform .15s ease;
+}
+.btn:active{ transform:translateY(1px); }
+
+/* Principal */
+.btn-primary{ background:var(--negro-oliva); color:var(--crema); }
+.btn-primary:hover{ background:var(--verde-oliva); color:var(--blanco-calido); }
+
+/* Secundario */
+.btn-secondary{ background:transparent; color:var(--negro-oliva); border:1px solid var(--negro-oliva); }
+.btn-secondary:hover{ background:var(--negro-oliva); color:var(--crema); }
+
+/* Editorial (sin caja, línea dorada inferior) */
+.btn-editorial{
+  display:inline-block;
+  padding:.2em 0;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:.95rem;
+  letter-spacing:.01em;
+  text-transform:none;
+  color:var(--negro-oliva);
+  border-bottom:1.5px solid var(--dorado);
+  transition:color .2s ease, border-color .2s ease;
+}
+.btn-editorial:hover{ color:var(--verde-oliva); border-color:var(--verde-oliva); }
+
+/* Botón pequeño (header) */
+.btn-sm{ padding:.6em 1.25em; font-size:.74rem; }
+
+/* ------------------------------------------------------------
+   6. HEADER
+   ------------------------------------------------------------ */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:color-mix(in srgb, var(--crema) 88%, transparent);
+  backdrop-filter:saturate(120%) blur(8px);
+  border-bottom:var(--line);
+}
+.site-header__inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding-block:14px;
+}
+.brand img{ height:34px; width:auto; }
+.brand{ display:inline-flex; align-items:center; }
+
+.nav{ display:flex; align-items:center; gap:clamp(18px,2.4vw,34px); }
+.nav a{
+  font-weight:500;
+  font-size:.92rem;
+  color:var(--negro-oliva);
+  position:relative;
+  padding-block:6px;
+}
+.nav a::after{
+  content:""; position:absolute; left:0; bottom:0;
+  width:0; height:1.5px; background:var(--dorado);
+  transition:width .25s ease;
+}
+.nav a:hover::after{ width:100%; }
+
+.header-actions{ display:flex; align-items:center; gap:14px; }
+
+/* Hamburguesa */
+.nav-toggle{ display:none; flex-direction:column; gap:5px; padding:8px; }
+.nav-toggle span{ width:24px; height:2px; background:var(--negro-oliva); transition:.3s; }
+
+/* ------------------------------------------------------------
+   7. HERO
+   ------------------------------------------------------------ */
+.hero{ position:relative; overflow:hidden; }
+.hero__grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:clamp(32px, 5vw, 80px);
+  align-items:center;
+  padding-block:clamp(48px,7vw,96px);
+}
+.hero__claim{ max-width:15ch; margin-bottom:22px; }
+.hero__sub{
+  font-size:clamp(1rem,1.3vw,1.15rem);
+  max-width:46ch;
+  margin-bottom:14px;
+  color:var(--negro-oliva);
+}
+.hero__origin{
+  font-family:var(--font-editorial);
+  font-style:italic;
+  font-size:1.3rem;
+  color:var(--verde-oliva);
+  margin-bottom:32px;
+}
+.hero__cta{ display:flex; flex-wrap:wrap; gap:16px; align-items:center; }
+
+/* Imagen de producto del hero */
+.hero__media{ position:relative; display:flex; justify-content:center; }
+.hero__media img{
+  width:auto;
+  max-height:clamp(420px, 64vh, 680px);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-soft);
+}
+/* Detalle gráfico: bloque verde oliva + línea dorada */
+.hero__media::before{
+  content:"";
+  position:absolute; inset:auto -4% -6% 22%;
+  height:62%; z-index:-1;
+  background:var(--verde-oliva);
+  border-radius:var(--radius);
+  opacity:.16;
+  transform:rotate(-3deg);
+}
+.hero__rule{
+  width:120px; height:0; border-top:2px solid var(--dorado);
+  margin-bottom:26px;
+}
+
+/* ------------------------------------------------------------
+   8. BLOQUE DE ORIGEN
+   ------------------------------------------------------------ */
+.origin{
+  background:var(--verde-oliva);
+  color:var(--crema);
+  position:relative;
+  overflow:hidden;
+}
+.origin h2{ color:var(--crema); }
+.origin__grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(28px,5vw,72px);
+  align-items:center;
+}
+.origin__text .editorial{
+  font-size:clamp(1.4rem,2.4vw,2rem);
+  color:var(--blanco-calido);
+  margin-top:18px;
+}
+.origin__lead{ margin-top:22px; color:color-mix(in srgb, var(--crema) 86%, transparent); max-width:48ch; }
+/* motivo geométrico sutil (diagonal) */
+.origin::after{
+  content:"";
+  position:absolute; right:-8%; top:-20%;
+  width:46%; height:140%;
+  background:color-mix(in srgb, var(--negro-oliva) 22%, transparent);
+  transform:skewX(-12deg);
+  pointer-events:none;
+}
+.origin .container{ position:relative; z-index:1; }
+
+/* ------------------------------------------------------------
+   9. BLOQUE DE ATRIBUTOS (4 cards)
+   ------------------------------------------------------------ */
+.attrs__head{ max-width:54ch; margin-bottom:clamp(28px,4vw,48px); }
+.attrs__grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.attr-card{
+  background:var(--blanco-calido);
+  border:1px solid color-mix(in srgb, var(--verde-oliva) 40%, transparent);
+  border-radius:var(--radius);
+  padding:28px 24px 30px;
+  box-shadow:var(--shadow-card);
+  transition:border-color .25s ease, transform .25s ease;
+}
+.attr-card:hover{ border-color:var(--dorado); transform:translateY(-4px); }
+.attr-card__num{
+  font-family:var(--font-heading);
+  font-weight:600;
+  font-size:.95rem;
+  color:var(--dorado);
+  letter-spacing:.1em;
+}
+.attr-card__icon{ width:30px; height:30px; margin:14px 0 16px; color:var(--verde-oliva); }
+.attr-card h3{ font-size:1.18rem; margin-bottom:8px; }
+.attr-card p{ font-size:.92rem; color:var(--gris-texto); }
+
+/* ------------------------------------------------------------
+   10. SECCIÓN PRODUCTO
+   ------------------------------------------------------------ */
+.product__grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(32px,5vw,80px);
+  align-items:center;
+}
+.product__media{
+  background:var(--blanco-calido);
+  border:var(--line);
+  border-radius:var(--radius);
+  padding:clamp(24px,4vw,56px);
+  display:flex; justify-content:center;
+}
+.product__media img{ max-height:560px; width:auto; box-shadow:var(--shadow-soft); border-radius:var(--radius); }
+
+.product__name{ font-size:clamp(2rem,3.4vw,2.8rem); }
+.product__price{
+  font-family:var(--font-heading); font-weight:600;
+  font-size:1.6rem; color:var(--negro-oliva); margin:6px 0 18px;
+}
+.product__price small{ font-size:.82rem; color:var(--gris-texto); font-weight:500; }
+.product__desc{ max-width:44ch; margin-bottom:24px; color:var(--gris-texto); }
+
+/* Selector de cantidad */
+.qty{ display:inline-flex; align-items:center; border:1px solid var(--negro-oliva); border-radius:var(--radius-pill); overflow:hidden; }
+.qty button{ width:42px; height:42px; font-size:1.2rem; color:var(--negro-oliva); transition:background .2s; }
+.qty button:hover{ background:color-mix(in srgb, var(--negro-oliva) 8%, transparent); }
+.qty input{ width:46px; text-align:center; border:0; background:transparent; font-family:var(--font-body); font-weight:600; font-size:1rem; color:var(--negro-oliva); -moz-appearance:textfield; }
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{ -webkit-appearance:none; }
+
+.product__buy{ display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-block:6px 28px; }
+
+/* Ficha de detalles */
+.product__details{ display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; border-top:var(--line); padding-top:22px; }
+.product__details dt{ font-family:var(--font-heading); font-weight:500; text-transform:uppercase; letter-spacing:.08em; font-size:.72rem; color:var(--verde-oliva); }
+.product__details dd{ font-size:.96rem; margin-top:2px; }
+
+/* Badge terracota (acento puntual) */
+.badge{
+  display:inline-block;
+  font-family:var(--font-heading); font-weight:600; text-transform:uppercase;
+  letter-spacing:.08em; font-size:.7rem;
+  color:var(--blanco-calido); background:var(--terracota);
+  padding:5px 12px; border-radius:var(--radius-pill);
+  margin-bottom:16px;
+}
+
+/* ------------------------------------------------------------
+   11. BLOQUE EDITORIAL
+   ------------------------------------------------------------ */
+.editorial-block{ text-align:center; }
+.editorial-block .editorial{
+  font-size:clamp(1.8rem, 4vw, 3.1rem);
+  max-width:18ch;
+  margin-inline:auto;
+  color:var(--negro-oliva);
+}
+.editorial-block__rule{ width:90px; height:0; border-top:1.5px solid var(--dorado); margin:0 auto 30px; }
+.editorial-block .editorial-i{ color:var(--verde-oliva); }
+
+/* ------------------------------------------------------------
+   12. FOOTER
+   ------------------------------------------------------------ */
+.site-footer{ background:var(--negro-oliva); color:var(--crema); padding-block:clamp(48px,6vw,80px) 36px; }
+.site-footer__top{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:36px; }
+.footer-logo{
+  font-family:var(--font-heading); font-weight:700; text-transform:uppercase;
+  letter-spacing:-0.02em; font-size:2.6rem; color:var(--crema); line-height:1;
+}
+.site-footer p{ color:color-mix(in srgb, var(--crema) 78%, transparent); font-size:.92rem; max-width:34ch; }
+.footer-col h4{ color:var(--dorado); font-size:.82rem; letter-spacing:.12em; margin-bottom:14px; }
+.footer-col a{ display:block; padding:5px 0; color:color-mix(in srgb, var(--crema) 82%, transparent); font-size:.92rem; }
+.footer-col a:hover{ color:var(--dorado); }
+.site-footer__rule{ height:0; border-top:1px solid color-mix(in srgb, var(--dorado) 60%, transparent); margin:clamp(32px,4vw,48px) 0 22px; }
+.site-footer__bottom{ display:flex; flex-wrap:wrap; gap:10px 24px; justify-content:space-between; align-items:center; }
+.site-footer__bottom .editorial{ font-style:italic; color:var(--dorado); font-size:1.15rem; }
+.site-footer__bottom small{ color:color-mix(in srgb, var(--crema) 60%, transparent); font-size:.8rem; }
+
+/* ------------------------------------------------------------
+   13. IMÁGENES (clases de tratamiento)
+   ------------------------------------------------------------ */
+.img-editorial{ border-radius:var(--radius); box-shadow:var(--shadow-soft); }
+.img-soft{ border-radius:var(--radius); box-shadow:var(--shadow-card); }
+.img-warm{ filter:saturate(1.04) contrast(1.02) brightness(1.01); }
+.media-frame{ background:var(--blanco-calido); border:var(--line); border-radius:var(--radius); padding:clamp(16px,2.5vw,32px); }
+.media-frame--olive{ background:var(--verde-oliva); border-color:transparent; }
+
+/* ------------------------------------------------------------
+   14. RESPONSIVE (mobile-first overrides)
+   ------------------------------------------------------------ */
+@media (max-width:960px){
+  .hero__grid{ grid-template-columns:1fr; gap:40px; }
+  .hero__media{ order:-1; }
+  .origin__grid{ grid-template-columns:1fr; }
+  .product__grid{ grid-template-columns:1fr; }
+  .attrs__grid{ grid-template-columns:repeat(2,1fr); }
+  .site-footer__top{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:680px){
+  .nav, .header-actions .btn-sm{ display:none; }
+  .nav-toggle{ display:flex; }
+  /* nav móvil desplegable */
+  .nav.is-open{
+    display:flex; flex-direction:column; align-items:flex-start; gap:4px;
+    position:absolute; top:100%; left:0; right:0;
+    background:var(--crema); border-bottom:var(--line);
+    padding:18px var(--pad-x) 24px;
+  }
+  .nav.is-open a{ font-size:1.1rem; padding-block:10px; }
+  .attrs__grid{ grid-template-columns:1fr; }
+  .product__details{ grid-template-columns:1fr; }
+  .site-footer__top{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce){
+  *{ scroll-behavior:auto; transition:none !important; }
+}

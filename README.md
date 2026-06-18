@@ -1,86 +1,65 @@
-# AURO — Landing Page
+# AURO — Aceite de Oliva Virgen Extra
 
-Landing page de **AURO**, aceite de oliva virgen extra de Jaén (100% Arbequina), orientada al mercado alemán. Markteinführung 2026.
-
-Estética xilográfica en verde oscuro + crema/marfil, con tipografía Barlow Condensed / DM Sans, animaciones GSAP y un formulario de captación de leads (Vormerkung) con consentimiento RGPD.
+Marca de aceite de oliva virgen extra **100% Picual** de cosecha temprana, **Sierra Mágina · Jaén**.
+Estética mediterránea, artesanal, premium y editorial.
 
 ## Estructura
 
-Sitio estático, sin build. Se sirve tal cual.
-
 ```
-index.html            # Landing principal (alemán — mercado objetivo)
-index.es.html         # Misma landing en español (equivalencia de traducción)
-impressum.html        # Aviso legal (§5 DDG/TMG)
-datenschutz.html      # Política de privacidad (DSGVO/RGPD)
-kontakt.html          # Contacto
+index.html            # Web principal (ES) — sistema visual / e-commerce gourmet
+styles.css            # Sistema visual (variables, componentes, responsive)
+assets/
+  logo-auro.png         # Logotipo (AURO + rama de olivo + gota dorada)
+  lata-auro.png         # Producto: lata 500 ml
 favicon.svg           # Favicon (oliva + hoja)
-laurel.svg            # Marco decorativo (laurel) — fondos oscuros
-laurel-dark.svg       # Marco decorativo (laurel) — fondos claros
-*.jpg / *.png         # Imágenes (lata, cosecha, ensalada, paisaje, patrón…)
+
+de/                   # Landing de prelanzamiento mercado alemán (archivada)
+  index.html            # Versión alemana
+  index.es.html         # Versión española de esa landing
+  impressum.html · datenschutz.html · kontakt.html   # Legales (DSGVO)
+  *.jpg · *.svg         # Sus imágenes y marcos de laurel
+
+.github/workflows/    # Despliegue automático a GitHub Pages
 ```
+
+## Sistema visual (web principal)
+
+- **Paleta** (variables `:root`): negro oliva `#171713`, verde oliva `#6F6B2E`, dorado `#B9983A`,
+  crema `#F4EFE5`, terracota `#B64222`, blanco cálido `#FFFAF2`, gris texto `#5F5A4D`.
+- **Tipografías**: Oswald (titulares), Inter (cuerpo/UI), Cormorant Garamond (editorial).
+- **Componentes**: header, hero, bloque de origen, atributos (4 cards), sección producto
+  (con selector de cantidad), bloque editorial y footer.
+- **Botones**: principal, secundario y editorial.
+- Textura papel sutil, separadores finos, formas geométricas y motivos de olivo.
+- Responsive mobile-first.
 
 ## Desarrollo local
 
-Cualquier servidor estático sirve. Por ejemplo:
-
 ```bash
-python3 -m http.server 8000
-# o
-npx serve .
+python3 -m http.server 8000   # o: npx serve .
 ```
-
-Luego abre http://localhost:8000
+Web principal → http://localhost:8000 · Landing alemana → http://localhost:8000/de/
 
 ## Despliegue — GitHub Pages (automático)
 
-El despliegue está automatizado con GitHub Actions (`.github/workflows/deploy.yml`):
-cada `push` a `main` publica el sitio.
+GitHub Actions (`.github/workflows/deploy.yml`) publica en cada `push` a `main`.
+Configuración: **Settings → Pages → Source: GitHub Actions**.
 
-**Configuración inicial (una sola vez):**
-
-1. Sube el repositorio a GitHub.
-2. En **Settings → Pages → Build and deployment**, selecciona **Source: GitHub Actions**.
-3. Listo. A partir de ahí, cada push a `main` ejecuta el workflow y publica en
-   `https://<usuario>.github.io/<repo>/`.
-
-Puedes ver el estado en la pestaña **Actions** y lanzarlo a mano con **Run workflow**
-(evento `workflow_dispatch`).
-
-El archivo `.nojekyll` evita el procesado por Jekyll.
+- Web principal: `https://<usuario>.github.io/<repo>/`
+- Landing alemana: `https://<usuario>.github.io/<repo>/de/`
 
 ### Dominio propio (opcional)
 
-Hay una plantilla `CNAME.example` con el dominio (`auro.de`). **No se activa hasta que
-lo renombres a `CNAME`** — así no interfiere con la URL `*.github.io` mientras no tengas
-el dominio y el DNS listos.
-
-**Para activarlo:**
-
-1. Configura el DNS de tu dominio:
-   - **Apex (`auro.de`)** → registros `A` a las IP de GitHub Pages:
-     ```
-     185.199.108.153
-     185.199.109.153
-     185.199.110.153
-     185.199.111.153
-     ```
-     (y opcionalmente los `AAAA`: `2606:50c0:8000::153` … `8003::153`)
-   - **Subdominio (`www.auro.de`)** → registro `CNAME` a `<usuario>.github.io.`
-2. Renombra el archivo y haz push:
-   ```bash
-   git mv CNAME.example CNAME
-   git commit -m "Activa dominio propio auro.de"
-   git push
-   ```
-3. En **Settings → Pages → Custom domain**, escribe el dominio y marca **Enforce HTTPS**.
+`CNAME.example` contiene el dominio. Renómbralo a `CNAME` cuando el DNS apunte a GitHub Pages
+(ver IPs en el historial del archivo) y configúralo en **Settings → Pages → Custom domain**.
 
 ## Pendiente antes de producción
 
-- Rellenar los datos `[entre corchetes]` en `impressum.html`, `datenschutz.html` y `kontakt.html`.
-- Auto-alojar Google Fonts y GSAP (ahora vía CDN) para cumplir RGPD de forma estricta.
-- Conectar el formulario a un backend / servicio de email (ahora guarda en `localStorage` y exporta CSV en local).
-- Optimizar/convertir las imágenes a WebP.
+- Sustituir placeholders: precio, email (`hola@auro.es`), teléfono, redes.
+- Conectar el botón **Comprar** a carrito/checkout real.
+- Versión clara/transparente del logo para fondos oscuros (footer).
+- Rellenar datos legales `[entre corchetes]` (en `de/` y crear las legales ES si se necesitan).
+- Auto-alojar fuentes para RGPD estricto y optimizar imágenes a WebP.
 
 ---
 
