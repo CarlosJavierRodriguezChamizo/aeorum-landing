@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="13" fill="#1a3a1a"/>
-  <!-- hoja -->
-  <path d="M33 26 C 45 13 58 18 58 18 C 55 32 43 33 33 25 Z" fill="#c8a83c"/>
-  <line x1="33" y1="26" x2="52" y2="20" stroke="#1a3a1a" stroke-width="1.6" stroke-linecap="round"/>
+  <rect width="64" height="64" rx="14" fill="#171713"/>
+  <!-- hoja de olivo -->
+  <path d="M34 20 C 45 11 57 15 57 15 C 54 27 42 28 34 21 Z" fill="#6F6B2E"/>
+  <line x1="35" y1="21" x2="53" y2="16" stroke="#171713" stroke-width="1.4" stroke-linecap="round"/>
   <!-- oliva -->
-  <ellipse cx="28" cy="40" rx="13" ry="16.5" fill="#e8f0c8"/>
-  <ellipse cx="28" cy="40" rx="6.4" ry="8.6" fill="#1a3a1a"/>
-  <ellipse cx="28" cy="40" rx="2.6" ry="3.6" fill="#e8f0c8"/>
+  <ellipse cx="28" cy="31" rx="13" ry="16" fill="#B9983A"/>
+  <ellipse cx="23" cy="26" rx="3" ry="4.5" fill="#F4EFE5" opacity="0.45"/>
+  <!-- gota de aceite dorada -->
+  <path d="M28 46 C 24 52 22 55 22 58 A 6 6 0 0 0 34 58 C 34 55 32 52 28 46 Z" fill="#B9983A"/>
 </svg>
