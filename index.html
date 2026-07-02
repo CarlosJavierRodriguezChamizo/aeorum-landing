@@ -35,7 +35,8 @@
     </nav>
 
     <div class="header-actions">
-      <a href="#producto" class="btn btn-primary btn-sm">Comprar</a>
+      <a href="de/" class="lang-switch" aria-label="Deutsche Version">DE</a>
+      <a href="#lista" class="btn btn-primary btn-sm">Unirme</a>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -57,7 +58,7 @@
         <p class="hero__sub">100% Picual. Un aceite intenso, elegante y profundamente mediterráneo.</p>
         <p class="hero__origin editorial editorial-i">Sierra Mágina · Jaén</p>
         <div class="hero__cta">
-          <a href="#producto" class="btn btn-primary">Comprar ahora</a>
+          <a href="#lista" class="btn btn-primary">Únete a la lista</a>
           <a href="#origen" class="btn btn-secondary">Conocer el origen</a>
         </div>
       </div>
@@ -149,18 +150,13 @@
       </div>
 
       <div class="product__info">
-        <span class="badge">Edición cosecha 2026</span>
+        <span class="badge">Próximamente · Cosecha 2026</span>
         <h2 class="product__name">AURO · 500 ml</h2>
-        <p class="product__price">29,00 € <small>/ lata · IVA incl.</small></p>
+        <p class="product__price">29,00 € <small>/ lata · precio de lanzamiento</small></p>
         <p class="product__desc">Aceite de oliva virgen extra 100% Picual de cosecha temprana. Verde, frutado y con un amargor noble. Envasado en lata para protegerlo de la luz.</p>
 
         <div class="product__buy">
-          <div class="qty" aria-label="Cantidad">
-            <button type="button" id="qtyMinus" aria-label="Quitar uno">−</button>
-            <input type="number" id="qty" value="1" min="1" max="99" inputmode="numeric" aria-label="Cantidad">
-            <button type="button" id="qtyPlus" aria-label="Añadir uno">+</button>
-          </div>
-          <a href="#" class="btn btn-primary" id="buyBtn">Comprar ahora</a>
+          <a href="#lista" class="btn btn-primary">Únete a la lista de espera</a>
         </div>
 
         <dl class="product__details">
@@ -181,6 +177,41 @@
       <div class="editorial-block__rule" aria-hidden="true"></div>
       <p class="kicker kicker--gold" style="margin-bottom:18px;">El carácter</p>
       <p class="editorial">Un aceite con carácter: <span class="editorial-i">verde, frutado, elegante</span> y con la fuerza justa para quedarse en la memoria.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LISTA DE ESPERA (CTA · formulario funcional)
+       ============================================================ -->
+  <section class="section waitlist" id="lista">
+    <div class="container waitlist__inner">
+      <p class="kicker kicker--gold">Lista de espera</p>
+      <h2 class="h-xl">Sé de los primeros<br>en probar AURO</h2>
+      <p class="waitlist__lead">Apúntate y te avisaremos en cuanto salga la primera cosecha. Acceso anticipado exclusivo para los primeros 500.</p>
+
+      <form class="waitlist__form" id="waitForm" novalidate>
+        <div class="waitlist__row">
+          <div>
+            <label class="field-l" for="wl-email">Email</label>
+            <input class="input" type="email" id="wl-email" name="email" placeholder="tu@email.com" required autocomplete="email">
+          </div>
+          <div>
+            <label class="field-l" for="wl-name">Nombre <span style="opacity:.6;font-weight:400;">(opcional)</span></label>
+            <input class="input" type="text" id="wl-name" name="name" placeholder="Tu nombre" autocomplete="name">
+          </div>
+        </div>
+        <label class="consent" for="wl-consent">
+          <input type="checkbox" id="wl-consent" required>
+          <span>Acepto recibir un email cuando AURO esté disponible y el tratamiento de mis datos. Puedo darme de baja en cualquier momento.</span>
+        </label>
+        <div class="waitlist__actions">
+          <button type="submit" class="btn btn-primary">Únete a la lista</button>
+        </div>
+        <p class="waitlist__note">Sin spam. Solo un email cuando arranque.</p>
+        <p class="waitlist__success" id="wlSuccess">¡Gracias! Ya estás en la lista de espera.</p>
+      </form>
+
+      <button type="button" class="export-link" id="wlExport">Exportar lista (.csv)</button>
     </div>
   </section>
 
@@ -232,13 +263,51 @@
     n.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ n.classList.remove('is-open'); t.setAttribute('aria-expanded','false'); }); });
   })();
 
-  /* Selector de cantidad */
+  /* Lista de espera — guarda en localStorage + exporta CSV */
   (function(){
-    var input = document.getElementById('qty');
-    var clamp = function(v){ return Math.max(1, Math.min(99, v||1)); };
-    document.getElementById('qtyMinus').addEventListener('click', function(){ input.value = clamp(parseInt(input.value,10)-1); });
-    document.getElementById('qtyPlus').addEventListener('click', function(){ input.value = clamp(parseInt(input.value,10)+1); });
-    input.addEventListener('change', function(){ input.value = clamp(parseInt(input.value,10)); });
+    var KEY = 'auro_waitlist';
+    var form = document.getElementById('waitForm');
+    if(!form) return;
+    var success = document.getElementById('wlSuccess');
+    var exportBtn = document.getElementById('wlExport');
+
+    function get(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
+    function save(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+    function refresh(){ exportBtn.classList.toggle('show', get().length > 0); }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email = document.getElementById('wl-email');
+      var name = document.getElementById('wl-name').value.trim();
+      var consent = document.getElementById('wl-consent');
+      var val = email.value.trim();
+      if(!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){ email.focus(); return; }
+      if(!consent.checked){ consent.focus(); return; }
+      var list = get();
+      list.push({ nombre:name, email:val, consent:true, timestamp:new Date().toISOString() });
+      save(list);
+      form.reset();
+      success.classList.add('show');
+      refresh();
+      setTimeout(function(){ success.classList.remove('show'); }, 6000);
+    });
+
+    function esc(v){ v = (v==null?'':String(v)); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+    exportBtn.addEventListener('click', function(){
+      var list = get(); if(!list.length) return;
+      var rows = [['Nombre','Email','Consentimiento','Fecha']];
+      list.forEach(function(l){
+        var f; try{ f = new Date(l.timestamp).toLocaleString('es-ES'); }catch(e){ f = l.timestamp; }
+        rows.push([l.nombre||'', l.email||'', l.consent?'Sí':'—', f]);
+      });
+      var csv = '﻿' + rows.map(function(r){ return r.map(esc).join(','); }).join('\r\n');
+      var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      var url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = 'auro_waitlist.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+
+    refresh();
   })();
 </script>
 
