@@ -53,12 +53,20 @@ Configuración: **Settings → Pages → Source: GitHub Actions**.
 `CNAME.example` contiene el dominio. Renómbralo a `CNAME` cuando el DNS apunte a GitHub Pages
 (ver IPs en el historial del archivo) y configúralo en **Settings → Pages → Custom domain**.
 
+## Formulario (lista de espera)
+
+Envío por email **sin servidor** vía [Web3Forms](https://web3forms.com):
+1. Consigue un **Access Key** gratis (introduces tu email).
+2. En `index.html` y `de/index.html`, sustituye `TU_ACCESS_KEY_WEB3FORMS` por tu clave.
+3. Sin clave, el formulario funciona en **modo demo** (guarda en `localStorage` + exporta CSV).
+
+Páginas de privacidad: `privacidad.html` (ES) · `de/datenschutz.html` (DE).
+
 ## Pendiente antes de producción
 
-- Sustituir placeholders: precio, email (`hola@auro.es`), teléfono, redes.
-- Conectar el botón **Comprar** a carrito/checkout real.
-- Versión clara/transparente del logo para fondos oscuros (footer).
-- Rellenar datos legales `[entre corchetes]` (en `de/` y crear las legales ES si se necesitan).
+- Poner el **Access Key** de Web3Forms (o backend propio).
+- Sustituir placeholders: precio, email (`hola@auro.es` / `hallo@auro.de`), teléfono, redes.
+- Rellenar datos `[entre corchetes]` en las páginas de privacidad.
 - Auto-alojar fuentes para RGPD estricto y optimizar imágenes a WebP.
 
 ---

@@ -187,7 +187,14 @@
     <div class="container waitlist__inner">
       <p class="kicker kicker--gold">Lista de espera</p>
       <h2 class="h-xl">Sé de los primeros<br>en probar AURO</h2>
-      <p class="waitlist__lead">Apúntate y te avisaremos en cuanto salga la primera cosecha. Acceso anticipado exclusivo para los primeros 500.</p>
+      <p class="waitlist__lead">Apúntate y te avisaremos en cuanto salga la primera cosecha.</p>
+
+      <div class="scarcity">
+        <span class="badge">Producción limitada</span>
+        <p class="scarcity__text">Primera cosecha 2026 · solo <strong>1.000 latas numeradas</strong>. Acceso anticipado para los primeros 500.</p>
+        <div class="scarcity__bar" aria-hidden="true"><span style="width:82%"></span></div>
+        <p class="scarcity__spots">Plazas casi agotadas — quedan pocas</p>
+      </div>
 
       <form class="waitlist__form" id="waitForm" novalidate>
         <div class="waitlist__row">
@@ -200,9 +207,11 @@
             <input class="input" type="text" id="wl-name" name="name" placeholder="Tu nombre" autocomplete="name">
           </div>
         </div>
+        <!-- honeypot anti-spam (no rellenar) -->
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
         <label class="consent" for="wl-consent">
           <input type="checkbox" id="wl-consent" required>
-          <span>Acepto recibir un email cuando AURO esté disponible y el tratamiento de mis datos. Puedo darme de baja en cualquier momento.</span>
+          <span>Acepto recibir un email cuando AURO esté disponible y el tratamiento de mis datos según la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Puedo darme de baja en cualquier momento.</span>
         </label>
         <div class="waitlist__actions">
           <button type="submit" class="btn btn-primary">Únete a la lista</button>
@@ -224,8 +233,8 @@
   <div class="container">
     <div class="site-footer__top">
       <div>
-        <div class="footer-logo">AURO</div>
-        <p style="margin-top:14px;">Aceite de oliva virgen extra de cosecha temprana. Elaborado en Sierra Mágina, Jaén.</p>
+        <img src="assets/logo-auro.png" alt="AURO" class="footer-logo-img">
+        <p style="margin-top:18px;">Aceite de oliva virgen extra de cosecha temprana. Elaborado en Sierra Mágina, Jaén.</p>
       </div>
       <div class="footer-col">
         <h4>Explorar</h4>
@@ -249,6 +258,10 @@
       <p class="editorial">Aceite de oliva virgen extra · Sierra Mágina · Jaén</p>
       <small>© 2026 AURO · Todos los derechos reservados</small>
     </div>
+    <div class="footer-legal">
+      <a href="privacidad.html">Política de privacidad</a>
+      <a href="#contacto">Contacto</a>
+    </div>
   </div>
 </footer>
 
@@ -271,9 +284,25 @@
     var success = document.getElementById('wlSuccess');
     var exportBtn = document.getElementById('wlExport');
 
+    /* Web3Forms: envío por email sin servidor. Consigue tu clave gratis en
+       https://web3forms.com (introduces tu email y te dan un Access Key). */
+    var ACCESS_KEY = 'TU_ACCESS_KEY_WEB3FORMS';
+    var btn = form.querySelector('button[type="submit"]');
+    var btnText = btn ? btn.textContent : '';
+
     function get(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
     function save(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
     function refresh(){ exportBtn.classList.toggle('show', get().length > 0); }
+
+    function done(ok){
+      form.reset();
+      if(btn){ btn.disabled = false; btn.textContent = btnText; }
+      success.textContent = ok ? '¡Gracias! Ya estás en la lista de espera.'
+                               : 'Guardado. No se pudo enviar el email — revisa la configuración.';
+      success.classList.add('show');
+      refresh();
+      setTimeout(function(){ success.classList.remove('show'); }, 6000);
+    }
 
     form.addEventListener('submit', function(e){
       e.preventDefault();
@@ -283,13 +312,32 @@
       var val = email.value.trim();
       if(!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){ email.focus(); return; }
       if(!consent.checked){ consent.focus(); return; }
+
+      // Copia local (respaldo / export CSV)
       var list = get();
       list.push({ nombre:name, email:val, consent:true, timestamp:new Date().toISOString() });
       save(list);
-      form.reset();
-      success.classList.add('show');
-      refresh();
-      setTimeout(function(){ success.classList.remove('show'); }, 6000);
+
+      // Envío real por email (Web3Forms). Sin clave → modo demo (solo local).
+      var configured = ACCESS_KEY && ACCESS_KEY.indexOf('TU_ACCESS_KEY') === -1;
+      if(!configured){ done(true); return; }
+
+      if(btn){ btn.disabled = true; btn.textContent = 'Enviando…'; }
+      fetch('https://api.web3forms.com/submit', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+        body: JSON.stringify({
+          access_key: ACCESS_KEY,
+          subject: 'Nueva alta · Lista de espera AURO',
+          from_name: 'AURO — Lista de espera',
+          email: val,
+          name: name || '(sin nombre)',
+          botcheck: false
+        })
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(res){ done(!!res.success); })
+      .catch(function(){ done(false); });
     });
 
     function esc(v){ v = (v==null?'':String(v)); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
